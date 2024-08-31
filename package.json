@@ -1,0 +1,22 @@
+{
+  "name": "todo-app-cli",
+  "version": "0.0.1",
+  "description": "Una Aplicacion ToDo para el Cli",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "type": "module",
+  "keywords": [
+    "Cli",
+    "ToDo"
+  ],
+  "author": "Luis Marval <Luismarval5a@hotmail.com>",
+  "license": "ISC",
+  "dependencies": {
+    "chalk": "^5.3.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0"
+  }
+}
