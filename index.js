@@ -1,12 +1,11 @@
-import { createInterface } from "node:readline"
-import chalk from "chalk"
 import { task } from "./function/task.js"
-
+import { createInterface,stdin,stdout} from "./deps.js"
+import chalk from "chalk";
 /* const task = [] */
 
 const rl = createInterface({
-  input:process.stdin,
-  output:process.stdout
+  input:stdin,
+  output:stdout
 })
 
 const displayMenu = () => {
@@ -22,26 +21,42 @@ const displayMenu = () => {
 
 function choseOption(){
   rl.question(" > ",(value) =>{
-      let valueInt = parseInt(value);
+      const valueInt = parseInt(value);
       switch(valueInt){
         case(5): 
           rl.write(null,{ctrl:true,name:"d"})
           rl.close
         break
         case(1):
-          rl.question("\nNombre de la tarea: \n>",(nombre) =>{
+          rl.question(("\nNombre de la tarea: \n>"),(nombre) =>{
             new task(nombre)
-            rl.write(null,{ctrl:true,name:"c"})
+            console.clear()
             displayMenu()
             choseOption()
           })
         break
+        case(2):
+          console.clear()
+          console.log(chalk.cyan.bold("    ** Lista de tareas **\n"))
+          console.log(chalk.cyan.bold("Nombre de las tareas  ->  estado de la tarea\n"))
+          task.list()
+          console.info('\npresione "Enter" para continuar')
+          rl.on('line', () => {
+            reCall()
+          }); 
+        break
         default:
-          console.log(chalk.red.bold("opcion invalida,intenta nuevamente\n"))
-          displayMenu()
-          choseOption()
+          console.log(chalk.red.bold('opcion invalida,pulse "enter" para volver a intentarlo\n'))
+          rl.on('line', () => {
+            reCall()
+          }); 
       }
   })
+}
+function reCall(){
+  console.clear();
+  displayMenu();
+  choseOption();
 }
 
 displayMenu()
