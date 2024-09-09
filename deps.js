@@ -1,4 +1,9 @@
-export { readFileSync } from "node:fs";
-export { readFile,writeFile } from "node:fs/promises";
-export { createInterface } from "node:readline";
-export { stdin,stdout } from "node:process";
+export { readFileSync,writeFileSync } from "node:fs";
+export { readFile } from "node:fs/promises";
+import { createInterface } from "node:readline";
+import { stdin,stdout } from "node:process";
+
+export const rl = createInterface({
+  input:stdin,
+  output:stdout
+})

@@ -1,12 +1,7 @@
-import { task } from "./function/task.js"
-import { createInterface,stdin,stdout} from "./deps.js"
+import { task } from "../function/task.js"
+import { rl } from "../deps.js"
 import chalk from "chalk";
 /* const task = [] */
-
-const rl = createInterface({
-  input:stdin,
-  output:stdout
-})
 
 const displayMenu = () => {
   console.log(
@@ -39,12 +34,40 @@ function choseOption(){
           console.clear()
           console.log(chalk.cyan.bold("    ** Lista de tareas **\n"))
           console.log(chalk.cyan.bold("Nombre de las tareas  ->  estado de la tarea\n"))
-          task.list()
+          const tarea = task.list()
+          for (const key in tarea) {
+            const mesage= ` ${parseInt(key)+1}. ${tarea[key]["name"]} -> `;
+            const status = tarea[key]["status"] === "complete" ? "✔" : "X"
+            console.log(`${mesage}${status}`)
+          }
           console.info('\npresione "Enter" para continuar')
           rl.on('line', () => {
             reCall()
           }); 
         break
+        case(3):
+          console.clear()
+          console.log(chalk.cyan.bold("    ** Seleccione la tarea realizada **\n"))
+          
+          rl.question(chalk.cyan.bold("Coloque el numero de la tarea completada\n >"),(input) =>{
+            task.complete(input) 
+            console.info('presione "Enter" para continuar')
+            rl.on('line', () => {
+            reCall()
+            }); 
+          })
+        break
+        case(4):
+        console.clear()
+        console.log(chalk.cyan.bold("    ** Seleccione la tarea a eliminar **\n"))
+        rl.question(chalk.cyan.bold("Coloque el numero de la tarea que desea eliminar\n >"),(input) =>{
+          task.delete(input)          
+          console.info('presione "Enter" para continuar')
+          rl.on('line', () => {
+          reCall()
+        }); 
+        })
+      break
         default:
           console.log(chalk.red.bold('opcion invalida,pulse "enter" para volver a intentarlo\n'))
           rl.on('line', () => {
