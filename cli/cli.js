@@ -5,10 +5,10 @@ import chalk from "chalk";
 
 const displayMenu = () => {
   console.log(
-    chalk.cyan.bold("    ** ToDo Cli **\n"),
+    ("    ** ToDo Cli **\n"),
     "1. Agregar Tarea\n",
-    "2. Listar Tarea\n",
-    "3. Completar Tarea\n",
+    "2. Listar Tareas\n",
+    "3. Actualizar Tarea\n",
     "4. Eliminar Tarea\n",
     "5. Salir"
   )
@@ -32,8 +32,8 @@ function choseOption(){
         break
         case(2):
           console.clear()
-          console.log(chalk.cyan.bold("    ** Lista de tareas **\n"))
-          console.log(chalk.cyan.bold("Nombre de las tareas  ->  estado de la tarea\n"))
+          console.log(("    ** Lista de tareas **\n"))
+          console.log(("Nombre de las tareas  ->  estado de la tarea\n"))
           const tarea = task.list()
           for (const key in tarea) {
             const mesage= ` ${parseInt(key)+1}. ${tarea[key]["name"]} -> `;
@@ -47,9 +47,9 @@ function choseOption(){
         break
         case(3):
           console.clear()
-          console.log(chalk.cyan.bold("    ** Seleccione la tarea realizada **\n"))
+          console.log(("    ** Seleccione la tarea realizada **\n"))
           
-          rl.question(chalk.cyan.bold("Coloque el numero de la tarea completada\n >"),(input) =>{
+          rl.question(("Coloque el numero de la tarea completada\n >"),(input) =>{
             task.complete(input) 
             console.info('presione "Enter" para continuar')
             rl.on('line', () => {
@@ -59,8 +59,8 @@ function choseOption(){
         break
         case(4):
         console.clear()
-        console.log(chalk.cyan.bold("    ** Seleccione la tarea a eliminar **\n"))
-        rl.question(chalk.cyan.bold("Coloque el numero de la tarea que desea eliminar\n >"),(input) =>{
+        console.log(("    ** Seleccione la tarea a eliminar **\n"))
+        rl.question(("Coloque el numero de la tarea que desea eliminar\n >"),(input) =>{
           task.delete(input)          
           console.info('presione "Enter" para continuar')
           rl.on('line', () => {
@@ -69,7 +69,7 @@ function choseOption(){
         })
       break
         default:
-          console.log(chalk.red.bold('opcion invalida,pulse "enter" para volver a intentarlo\n'))
+          console.log(('opcion invalida,pulse "enter" para volver a intentarlo\n'))
           rl.on('line', () => {
             reCall()
           }); 
