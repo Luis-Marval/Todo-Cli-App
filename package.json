@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "cli":"node ./cli.js",
+    "task-cli":"node ./cli/task-cli.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "type": "module",

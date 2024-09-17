@@ -2,23 +2,22 @@ import { readFileSync,readFile, writeFileSync } from "../deps.js"
 
 export class task{
   fileName = "task.json"
-  constructor(description){
-    this.id = 1;
-    this.name = description;
-    this.status = "todo";
-    this.createDate = new Date();
-    this.updateDate = "null";
-    this.Add()
+  static #instance;
+  static get instance(){
+    if(!task.#instance){
+      task.#instance = new task()
+    }
+    return task.#instance
   }
-  Add(){
+  Add(description){
     const exist = this.exists()
-    this.id = (exist === "default") ? 1 : parseInt(exist["task"].length)+1
+    const id = (exist === "default") ? 1 : parseInt(exist["task"].length)+1
     const template = {
-      "id":parseInt(this.id),
-      "description":this.name,
-      "status":this.status,
-      "createdAt":this.createDate,
-      "updatedAt":this.updateDate
+      "id":parseInt(id),
+      "description":description,
+      "status":"todo",
+      "createdAt":new Date(),
+      "updatedAt":null
     }
     if(exist === "default"){
       const data = ({
@@ -28,35 +27,58 @@ export class task{
       exist["task"].push(template)
       writeFileSync(this.fileName,JSON.stringify(exist)) 
     } 
+    return [true,id]
   }
   exists(){
     try{
       const data = JSON.parse(readFileSync(this.fileName,{encoding: "utf-8"}))
+      if(data["task"].length == 0){
+        throw ("faw")
+      }
       return data
     }catch(err){
       return "default"
     }
   }
 
-  static list(){
+  list(){
     try{
-      const data = JSON.parse(readFileSync("task.json",{encoding: "utf-8"}))
-      if (data["task"].length == 0){
-      throw ("No hay ninguna tarea asignada")
+      const data = this.exists();
+      if(data["task"].length == 0 || data === "default"){
+        throw ("Error:No hay ninguna tarea asignada")
       }
-      return data["task"]
+      return [data["task"],false]
     }catch(err){
-      console.log(err)
-      return false
+      return [err,true]
     }
   }
 
-  static complete(input){
+  update(input,description){
     try {
+      const data = this.exists();
       if (isNaN(parseInt(input)))throw ("Error:El digito ingresado no es un numero,")
-      input = parseInt(input)-1
-      const data = JSON.parse(readFileSync("task.json",{encoding: "utf-8"}));
-      data["task"][input]["status"] = "complete";
+      if(data === "default") throw ("Error: No hay ninguna tarea registrada")
+      
+      data["task"][input-1]["description"] = description;
+      data["task"][input-1]["updatedAt"] = new Date();
+
+      writeFileSync(this.fileName,JSON.stringify(data));
+
+      return true;
+    } catch (err) {
+      return false;
+    }
+  }
+
+  complete(input,status){
+    try {
+      const data = this.exists();
+      if (isNaN(parseInt(input)))throw ("Error:El digito ingresado no es un numero,")
+      if(data === "default") throw ("Error: No hay ninguna tarea registrada")
+      
+      const stat =  status === 1 ? "in-progress" : "done"
+
+      data["task"][input-1]["status"] = stat;
       writeFileSync("task.json",JSON.stringify(data));
       return true;
     } catch (err) {
@@ -65,18 +87,19 @@ export class task{
     }
   }
 
-  static delete(input){
+  delete(input){
     try {
-      if (isNaN(parseInt(input)))throw ("Error:El digito ingresado no es un numero,")
-      const data = JSON.parse(readFileSync("task.json",{encoding: "utf-8"}));
+      const data = this.exists();
+      if (isNaN(parseInt(input)))throw ("El digito ingresado no es un numero")
+      if(data === "default") throw ("No hay ninguna tarea registrada")
+      if(!data["task"][parseInt(input)-1]) throw ("La tarea seleccionara no existe")
+      
       data["task"].splice(parseInt(input)-1,1);
       writeFileSync("task.json",JSON.stringify(data));
       return true
     }catch(err){
       console.log(err)
-      return false
+      return err
     }
   }
 }
-
-new task("sair")
