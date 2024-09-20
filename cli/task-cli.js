@@ -8,6 +8,18 @@ const tarea = task.instance
 // se almacena la instacia de la clase task en la constate tarea
 let result;
 // se crea una funcion en la cual se le pasara un argumento
+
+//funcion utilizada para mostrar la informacion de las tareas en pantalla
+const viewList = (res) =>{
+  const create = new Date(res["createdAt"])
+  console.log(`Id:${res["id"]}\n`,`Descricion:${res["description"]}\n`,`Estado:${res["status"]}\n`,`Fecha de creacion:${create.getHours()}:${create.getMinutes()}:${create.getSeconds() == 0 ? "00":create.getSeconds()} ${create.getDate()}/${(create.getMonth()) +1}/${create.getFullYear()}`)
+  if(res["updatedAt"] != null) {
+    const update = new Date(res["updatedAt"])
+    console.log(` Ultima Actualizacion:${update.getHours()}:${update.getMinutes()}:${update.getSeconds() == 0 ? "00":update.getSeconds()} ${update.getDate()}/${(update.getMonth()) +1}/${update.getFullYear()}\n`)
+  }
+  else console.log(`\n`)
+}
+
 const inputOption = (arg) =>{
   try {
     // se utilizada el argumento para seleccionar la tarea a utilizar con un switch
@@ -40,13 +52,7 @@ const inputOption = (arg) =>{
         }
         console.log(`\nLista de tareas ${arg}\n`)
         for(const res of result){
-          const create = new Date(res["createdAt"])
-          console.log(`Id:${res["id"]}\n`,`Descricion:${res["description"]}\n`,`Estado:${res["status"]}\n`,`Fecha de creacion:${create.getHours()}:${create.getMinutes()}:${create.getSeconds() == 0 ? "00":create.getSeconds()} ${create.getDate()}/${(create.getMonth()) +1}/${create.getFullYear()}`)
-          if(res["updatedAt"] != null) {
-            const update = new Date(res["updatedAt"])
-            console.log(` Ultima Actualizacion:${update.getHours()}:${update.getMinutes()}:${update.getSeconds() == 0 ? "00":update.getSeconds()} ${update.getDate()}/${(update.getMonth()) +1}/${update.getFullYear()}\n`)
-          }
-          else console.log(`\n`)
+          viewList(res)
         };
       break;
       case "mark":
