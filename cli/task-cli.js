@@ -29,11 +29,17 @@ const inputOption = (arg) =>{
       case "list":
         result= tarea.list()
         result = result["task"]
-        if(argTwo != undefined && argTwo != "todo" && argTwo != "in-progress" && argTwo != "done") throw new Error("Coloque una opcion valida en la lista")
+        if(argTwo != undefined && argTwo != "todo" && argTwo != "in-progress" && argTwo != "done"){
+          throw new Error("Coloque una opcion valida en la lista")
+        }
         const arg = argTwo === undefined ?"":argTwo
+        if (argTwo != undefined){
+          result = result.filter(res =>{
+            return res["status"] === argTwo
+          })
+        }
         console.log(`\nLista de tareas ${arg}\n`)
         for(const res of result){
-          if (typeof argTwo != "undefined" && res["status"] != argTwo){ continue}
           const create = new Date(res["createdAt"])
           console.log(`Id:${res["id"]}\n`,`Descricion:${res["description"]}\n`,`Estado:${res["status"]}\n`,`Fecha de creacion:${create.getHours()}:${create.getMinutes()}:${create.getSeconds() == 0 ? "00":create.getSeconds()} ${create.getDate()}/${(create.getMonth()) +1}/${create.getFullYear()}`)
           if(res["updatedAt"] != null) {
